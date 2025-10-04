@@ -1,0 +1,254 @@
+version: "3.8"
+
+networks:
+  richs_pizza_network:
+    driver: bridge
+
+services:
+  # Node 1: Rich's Products (Validator + Tessera)
+  besu-node1:
+    image: hyperledger/besu:latest
+    container_name: besu-node1
+    restart: unless-stopped
+    environment:
+      - BESU_IDENTITY=richs-products
+    command: |
+      --network-id=2024
+      --genesis-file=/opt/besu/genesis.json
+      --node-private-key-file=/opt/besu/keys/node1/key
+      --data-path=/opt/besu/data
+      --rpc-http-enabled=true
+      --rpc-http-host=0.0.0.0
+      --rpc-http-port=8545
+      --rpc-http-cors-origins="*"
+      --rpc-http-api=ETH,NET,WEB3,IBFT,PRIV
+      --host-allowlist="*"
+      --p2p-enabled=true
+      --p2p-host=0.0.0.0
+      --p2p-port=30303
+      --discovery-enabled=false
+      --static-nodes-file=/opt/besu/static-nodes.json
+      --privacy-enabled=true
+      --privacy-url=http://tessera-node1:9101
+      --privacy-public-key-file=/opt/besu/tessera/tm.pub
+      --min-gas-price=0
+    volumes:
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./keys:/opt/besu/keys
+      - ./static-nodes.json:/opt/besu/static-nodes.json
+      - ./tessera:/opt/besu/tessera
+      - besu_node1_data:/opt/besu/data
+    ports:
+      - "8545:8545"
+      - "30303:30303"
+    networks:
+      - richs_pizza_network
+    depends_on:
+      - tessera-node1
+
+  tessera-node1:
+    image: consensys/tessera:latest
+    container_name: tessera-node1
+    restart: unless-stopped
+    environment:
+      - TESSERA_CONFIG_TYPE="-configfile"
+    command: |
+      -configfile /tessera/tessera-config.json
+    volumes:
+      - ./tessera/node1:/tessera
+    ports:
+      - "9101:9101"
+    networks:
+      - richs_pizza_network
+
+  # Node 2: Supplier Consortium (Validator + Tessera)
+  besu-node2:
+    image: hyperledger/besu:latest
+    container_name: besu-node2
+    restart: unless-stopped
+    environment:
+      - BESU_IDENTITY=supplier-consortium
+    command: |
+      --network-id=2024
+      --genesis-file=/opt/besu/genesis.json
+      --node-private-key-file=/opt/besu/keys/node2/key
+      --data-path=/opt/besu/data
+      --rpc-http-enabled=true
+      --rpc-http-host=0.0.0.0
+      --rpc-http-port=8545
+      --rpc-http-cors-origins="*"
+      --rpc-http-api=ETH,NET,WEB3,IBFT,PRIV
+      --host-allowlist="*"
+      --p2p-enabled=true
+      --p2p-host=0.0.0.0
+      --p2p-port=30303
+      --discovery-enabled=false
+      --static-nodes-file=/opt/besu/static-nodes.json
+      --privacy-enabled=true
+      --privacy-url=http://tessera-node2:9101
+      --privacy-public-key-file=/opt/besu/tessera/tm.pub
+      --min-gas-price=0
+    volumes:
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./keys:/opt/besu/keys
+      - ./static-nodes.json:/opt/besu/static-nodes.json
+      - ./tessera:/opt/besu/tessera
+      - besu_node2_data:/opt/besu/data
+    ports:
+      - "8546:8545"
+      - "30304:30303"
+    networks:
+      - richs_pizza_network
+    depends_on:
+      - tessera-node2
+
+  tessera-node2:
+    image: consensys/tessera:latest
+    container_name: tessera-node2
+    restart: unless-stopped
+    environment:
+      - TESSERA_CONFIG_TYPE="-configfile"
+    command: |
+      -configfile /tessera/tessera-config.json
+    volumes:
+      - ./tessera/node2:/tessera
+    ports:
+      - "9102:9101"
+    networks:
+      - richs_pizza_network
+
+  # Node 3: Logistics Partner (Validator + Tessera)
+  besu-node3:
+    image: hyperledger/besu:latest
+    container_name: besu-node3
+    restart: unless-stopped
+    environment:
+      - BESU_IDENTITY=logistics-partner
+    command: |
+      --network-id=2024
+      --genesis-file=/opt/besu/genesis.json
+      --node-private-key-file=/opt/besu/keys/node3/key
+      --data-path=/opt/besu/data
+      --rpc-http-enabled=true
+      --rpc-http-host=0.0.0.0
+      --rpc-http-port=8545
+      --rpc-http-cors-origins="*"
+      --rpc-http-api=ETH,NET,WEB3,IBFT,PRIV
+      --host-allowlist="*"
+      --p2p-enabled=true
+      --p2p-host=0.0.0.0
+      --p2p-port=30303
+      --discovery-enabled=false
+      --static-nodes-file=/opt/besu/static-nodes.json
+      --privacy-enabled=true
+      --privacy-url=http://tessera-node3:9101
+      --privacy-public-key-file=/opt/besu/tessera/tm.pub
+      --min-gas-price=0
+    volumes:
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./keys:/opt/besu/keys
+      - ./static-nodes.json:/opt/besu/static-nodes.json
+      - ./tessera:/opt/besu/tessera
+      - besu_node3_data:/opt/besu/data
+    ports:
+      - "8547:8545"
+      - "30305:30303"
+    networks:
+      - richs_pizza_network
+    depends_on:
+      - tessera-node3
+
+  tessera-node3:
+    image: consensys/tessera:latest
+    container_name: tessera-node3
+    restart: unless-stopped
+    environment:
+      - TESSERA_CONFIG_TYPE="-configfile"
+    command: |
+      -configfile /tessera/tessera-config.json
+    volumes:
+      - ./tessera/node3:/tessera
+    ports:
+      - "9103:9101"
+    networks:
+      - richs_pizza_network
+
+  # Node 4: Retail Group (Validator + Tessera)
+  besu-node4:
+    image: hyperledger/besu:latest
+    container_name: besu-node4
+    restart: unless-stopped
+    environment:
+      - BESU_IDENTITY=retail-group
+    command: |
+      --network-id=2024
+      --genesis-file=/opt/besu/genesis.json
+      --node-private-key-file=/opt/besu/keys/node4/key
+      --data-path=/opt/besu/data
+      --rpc-http-enabled=true
+      --rpc-http-host=0.0.0.0
+      --rpc-http-port=8545
+      --rpc-http-cors-origins="*"
+      --rpc-http-api=ETH,NET,WEB3,IBFT,PRIV
+      --host-allowlist="*"
+      --p2p-enabled=true
+      --p2p-host=0.0.0.0
+      --p2p-port=30303
+      --discovery-enabled=false
+      --static-nodes-file=/opt/besu/static-nodes.json
+      --privacy-enabled=true
+      --privacy-url=http://tessera-node4:9101
+      --privacy-public-key-file=/opt/besu/tessera/tm.pub
+      --min-gas-price=0
+    volumes:
+      - ./genesis.json:/opt/besu/genesis.json
+      - ./keys:/opt/besu/keys
+      - ./static-nodes.json:/opt/besu/static-nodes.json
+      - ./tessera:/opt/besu/tessera
+      - besu_node4_data:/opt/besu/data
+    ports:
+      - "8548:8545"
+      - "30306:30303"
+    networks:
+      - richs_pizza_network
+    depends_on:
+      - tessera-node4
+
+  tessera-node4:
+    image: consensys/tessera:latest
+    container_name: tessera-node4
+    restart: unless-stopped
+    environment:
+      - TESSERA_CONFIG_TYPE="-configfile"
+    command: |
+      -configfile /tessera/tessera-config.json
+    volumes:
+      - ./tessera/node4:/tessera
+    ports:
+      - "9104:9101"
+    networks:
+      - richs_pizza_network
+
+  # PostgreSQL Database for Indexer
+  postgres:
+    image: postgres:15
+    container_name: richs_pizza_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=richs_pizza_traceability
+      - POSTGRES_USER=richs_user
+      - POSTGRES_PASSWORD=richs_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - richs_pizza_network
+
+volumes:
+  besu_node1_data:
+  besu_node2_data:
+  besu_node3_data:
+  besu_node4_data:
+  postgres_data:

@@ -1,0 +1,55 @@
+networks:
+  richs_pizza_network:
+    driver: bridge
+
+services:
+  # Ganache CLI for simple development blockchain
+  ganache:
+    image: trufflesuite/ganache:v7.9.1
+    container_name: ganache-dev
+    restart: unless-stopped
+    command: >
+      --wallet.deterministic
+      --wallet.totalAccounts 10
+      --wallet.defaultBalance 1000
+      --chain.networkId 2024
+      --chain.chainId 2024
+      --server.host 0.0.0.0
+      --server.port 8545
+      --miner.blockGasLimit 8000000
+      --logging.quiet false
+    ports:
+      - "8545:8545"
+    networks:
+      - richs_pizza_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8545 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: richs_pizza_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=richs_pizza_traceability
+      - POSTGRES_USER=richs_user
+      - POSTGRES_PASSWORD=richs_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - richs_pizza_network
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U richs_user -d richs_pizza_traceability"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

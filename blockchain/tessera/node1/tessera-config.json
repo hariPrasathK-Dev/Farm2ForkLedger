@@ -1,0 +1,53 @@
+{
+  "useWhiteList": false,
+  "jdbc": {
+    "username": "sa",
+    "password": "",
+    "url": "jdbc:h2:./target/h2/tessera1",
+    "autoCreateTables": true
+  },
+  "serverConfigs": [
+    {
+      "app": "ThirdParty",
+      "enabled": true,
+      "serverAddress": "http://tessera-node1:9101",
+      "communicationType": "REST"
+    },
+    {
+      "app": "Q2T",
+      "enabled": true,
+      "serverAddress": "http://tessera-node1:9101",
+      "communicationType": "REST"
+    },
+    {
+      "app": "P2P",
+      "enabled": true,
+      "serverAddress": "http://tessera-node1:9001",
+      "sslConfig": {
+        "tls": "OFF"
+      },
+      "communicationType": "REST"
+    }
+  ],
+  "peer": [
+    {
+      "url": "http://tessera-node2:9001"
+    },
+    {
+      "url": "http://tessera-node3:9001"
+    },
+    {
+      "url": "http://tessera-node4:9001"
+    }
+  ],
+  "keys": {
+    "passwords": [],
+    "keyData": [
+      {
+        "privateKeyPath": "/tessera/tm.key",
+        "publicKeyPath": "/tessera/tm.pub"
+      }
+    ]
+  },
+  "alwaysSendTo": []
+}

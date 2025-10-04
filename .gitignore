@@ -1,0 +1,265 @@
+# =======================
+# Rich's Pizza Traceability Project
+# Comprehensive .gitignore
+# =======================
+
+# ========================
+# Node.js & NPM
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+.eslintcache
+.yarn-integrity
+
+# Package lock files (choose one strategy)
+package-lock.json
+yarn.lock
+
+# ========================
+# Environment Variables
+# ========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ========================
+# React Build Output
+# ========================
+ui/build/
+ui/dist/
+ui/.env
+ui/.env.local
+ui/.env.development.local
+ui/.env.test.local
+ui/.env.production.local
+
+# ========================
+# Solidity & Hardhat
+# ========================
+contracts/cache/
+contracts/artifacts/
+contracts/typechain/
+contracts/typechain-types/
+contracts/.openzeppelin/
+contracts/coverage/
+contracts/coverage.json
+contracts/deployments/localhost/
+contracts/deployments/hardhat/
+
+# Keep deployment configs for other networks
+!contracts/deployments/local.json
+!contracts/deployments/SupplyChain.json
+!contracts/deployments/SupplyChain.abi.json
+
+# ========================
+# Python & Virtual Environments
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+services/iot-simulator/venv/
+services/iot-simulator/env/
+
+# ========================
+# Database & Logs
+# ========================
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+
+# Database dumps and backups
+*.sql
+*.dump
+
+# Application logs
+services/indexer-api/logs/
+services/*/logs/
+
+# ========================
+# Docker
+# ========================
+.dockerignore
+docker-compose.override.yml
+
+# ========================
+# Blockchain & Keys
+# ========================
+# Private keys and sensitive blockchain data
+*.key
+*.pem
+*.p12
+*.keystore
+keystore/
+wallets/
+
+# Keep example keys for development
+!blockchain/keys/*/key
+!blockchain/tessera/*/tm.key
+!blockchain/tessera/*/tm.pub
+
+# Blockchain data directories
+blockchain/data/
+blockchain/logs/
+blockchain/node-data/
+geth/
+besu-data/
+
+# ========================
+# IDE & Editor Files
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# VS Code workspace settings (keep shared settings, ignore personal ones)
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# ========================
+# Testing & Coverage
+# ========================
+coverage/
+.nyc_output/
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+.coverage.*
+junit.xml
+test-results/
+
+# ========================
+# Build Tools & Deps
+# ========================
+.cache/
+.parcel-cache/
+.next/
+out/
+.nuxt/
+dist/
+build/
+
+# ========================
+# Temporary Files
+# ========================
+*.tmp
+*.temp
+.tmp/
+.temp/
+*.pid
+*.lock
+
+# ========================
+# Operating System
+# ========================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.nfs*
+
+# ========================
+# Security & Certificates
+# ========================
+*.crt
+*.key
+*.pem
+*.p12
+*.pfx
+ssl/
+certs/
+secrets/
+
+# Keep example/template certificates
+!blockchain/tessera/*/tm.pub
+
+# ========================
+# Miscellaneous
+# ========================
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ========================
+# Project Specific
+# ========================
+# Generated ABI files in services (keep the ones in contracts/deployments)
+services/*/deployments/
+services/*/contracts/
+
+# Keep the manually copied deployment files
+!services/indexer-api/deployments/local.json
+!services/indexer-api/deployments/SupplyChain.json
+!services/indexer-api/deployments/SupplyChain.abi.json
+
+# Demo data and test files
+demo-data/
+test-data/
+sample-data/
+
+# Documentation builds
+docs/_build/
+docs/build/

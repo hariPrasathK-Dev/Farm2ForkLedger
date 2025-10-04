@@ -1,0 +1,20 @@
+{
+  "name": "richs-pizza-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for Rich's Pizza supply chain traceability",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network local",
+    "deploy:besu": "hardhat run scripts/deploy.js --network besu"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "dotenv": "^16.3.1"
+  }
+}
