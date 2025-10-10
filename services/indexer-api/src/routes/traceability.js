@@ -56,10 +56,30 @@ router.get(
 
       const historyResult = await pool.query(historyQuery, [mainItem.item_id]);
 
+      // Add verification status (optional - only if explicitly requested)
+      let verification = null;
+      if (req.query.verify === "true") {
+        try {
+          const verifyRoute = require("./verification");
+          verification = await verifyAgainstBlockchain(mainItem.item_id);
+        } catch (error) {
+          logger.warn("Auto-verification failed:", error);
+          verification = {
+            verified: false,
+            error: "Auto-verification unavailable",
+            trustScore: 0,
+          };
+        }
+      }
+
       res.json({
         item: mainItem,
         traceabilityTree,
         history: historyResult.rows,
+        verification: verification,
+        verificationAvailable: true,
+        verificationNote:
+          "Add ?verify=true to automatically verify against blockchain",
       });
     } catch (error) {
       logger.error("Error fetching traceability data:", error);

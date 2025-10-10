@@ -54,6 +54,7 @@ app.get("/health", (req, res) => {
 app.use("/api/traceability", traceabilityRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/verification", require("./routes/verification"));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

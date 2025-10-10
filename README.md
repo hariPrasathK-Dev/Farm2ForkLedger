@@ -2,6 +2,14 @@
 
 A comprehensive blockchain-based supply chain traceability solution built with Hyperledger Besu, Solidity smart contracts, Node.js backend, React frontend, and Python IoT simulation.
 
+## 🎯 **For Quick Consumer Demo**: See `README_CONSUMER.md`
+
+**Just want to see it working?** Run: `.\start-platform.ps1` and visit http://localhost:3000
+
+## 🎭 **For Supply Chain Simulation**: See `REMIX_INTEGRATION_GUIDE.md`
+
+**Want to simulate entities?** Use Remix IDE to manage farmers, processors, distributors, and retailers.
+
 ## 🏗️ Architecture Overview
 
 ### Components

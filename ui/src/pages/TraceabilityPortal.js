@@ -18,6 +18,7 @@ import {
   ListItemText,
   IconButton,
   Collapse,
+  LinearProgress,
 } from "@mui/material";
 import Search from "@mui/icons-material/Search";
 import QrCodeScanner from "@mui/icons-material/QrCodeScanner";
@@ -27,6 +28,8 @@ import LocationOn from "@mui/icons-material/LocationOn";
 import Thermostat from "@mui/icons-material/Thermostat";
 import Person from "@mui/icons-material/Person";
 import Schedule from "@mui/icons-material/Schedule";
+import VerifiedUser from "@mui/icons-material/VerifiedUser";
+import Warning from "@mui/icons-material/Warning";
 import {
   LineChart,
   Line,
@@ -45,6 +48,8 @@ const TraceabilityPortal = () => {
   const [traceabilityData, setTraceabilityData] = useState(null);
   const [error, setError] = useState("");
   const [expandedItems, setExpandedItems] = useState({});
+  const [verificationResult, setVerificationResult] = useState(null);
+  const [verifying, setVerifying] = useState(false);
 
   const handleSearch = async () => {
     if (!lotCode.trim()) {
@@ -81,6 +86,30 @@ const TraceabilityPortal = () => {
       ...prev,
       [itemId]: !prev[itemId],
     }));
+  };
+
+  const verifyOnBlockchain = async () => {
+    if (!lotCode.trim()) {
+      setError("Please enter a lot code to verify");
+      return;
+    }
+
+    setVerifying(true);
+    setError("");
+
+    try {
+      const response = await apiClient.get(`/api/verification/${lotCode}`);
+      setVerificationResult(response.data);
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          err.response?.data?.error ||
+          "Failed to verify data against blockchain"
+      );
+      setVerificationResult(null);
+    } finally {
+      setVerifying(false);
+    }
   };
 
   const formatDate = (dateString) => {
@@ -237,6 +266,21 @@ const TraceabilityPortal = () => {
           >
             {loading ? "Searching..." : "Search"}
           </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            startIcon={
+              verifying ? <CircularProgress size={20} /> : <VerifiedUser />
+            }
+            onClick={verifyOnBlockchain}
+            disabled={verifying || !lotCode.trim()}
+            sx={{ minWidth: 140 }}
+            color={
+              verificationResult?.verification?.verified ? "success" : "primary"
+            }
+          >
+            {verifying ? "Verifying..." : "Verify"}
+          </Button>
           <IconButton size="large" disabled>
             <QrCodeScanner />
           </IconButton>
@@ -253,6 +297,88 @@ const TraceabilityPortal = () => {
         <Alert severity="error" sx={{ mb: 4 }}>
           {error}
         </Alert>
+      )}
+
+      {/* Verification Results */}
+      {verificationResult && (
+        <Paper sx={{ p: 3, mb: 4 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+            {verificationResult.verification.verified ? (
+              <VerifiedUser color="success" sx={{ mr: 1 }} />
+            ) : (
+              <Warning color="error" sx={{ mr: 1 }} />
+            )}
+            <Typography variant="h6">
+              Blockchain Verification Results
+            </Typography>
+          </Box>
+
+          <Alert
+            severity={
+              verificationResult.verification.verified ? "success" : "error"
+            }
+            sx={{ mb: 2 }}
+          >
+            {verificationResult.verification.verified
+              ? "✅ Data successfully verified against blockchain"
+              : `⚠️ Verification failed: ${verificationResult.verification.discrepancies?.join(
+                  ", "
+                )}`}
+          </Alert>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle2" gutterBottom>
+                Trust Score
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <LinearProgress
+                  variant="determinate"
+                  value={verificationResult.verification.trustScore || 0}
+                  sx={{ flexGrow: 1, mr: 2, height: 10, borderRadius: 5 }}
+                  color={
+                    verificationResult.verification.trustScore >= 80
+                      ? "success"
+                      : verificationResult.verification.trustScore >= 50
+                      ? "warning"
+                      : "error"
+                  }
+                />
+                <Typography variant="body2" fontWeight="bold">
+                  {verificationResult.verification.trustScore || 0}/100
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="subtitle2" gutterBottom>
+                Verification Time
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {formatDate(verificationResult.verificationTime)}
+              </Typography>
+            </Grid>
+          </Grid>
+
+          {verificationResult.verification.discrepancies &&
+            verificationResult.verification.discrepancies.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="subtitle2" gutterBottom color="error">
+                  Issues Detected:
+                </Typography>
+                {verificationResult.verification.discrepancies.map(
+                  (issue, index) => (
+                    <Chip
+                      key={index}
+                      label={issue}
+                      color="error"
+                      size="small"
+                      sx={{ mr: 1, mb: 1 }}
+                    />
+                  )
+                )}
+              </Box>
+            )}
+        </Paper>
       )}
 
       {/* Results */}

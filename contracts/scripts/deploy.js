@@ -60,33 +60,15 @@ async function main() {
 
   console.log("Deployment information saved to deployments directory");
 
-  // Setup initial roles (optional - for demo purposes)
-  console.log("\nSetting up demo roles...");
-
-  // Demo addresses for different roles
-  const demoAccounts = {
-    farmer: "0xf17f52151EbEF6C7334FAD080c5704D77216b732",
-    manufacturer: "0xC5fdf4076b8F3A5357c5E395ab970B5B54098Fef",
-    logistics: "0x821aEa9a577a9b44299B9c15c88cf3087F3b5544",
-    retailer: "0x0d1d4e623D10F9FBA5Db95830F7d3839406C6AF2",
-  };
-
-  // Grant roles
-  const FARMER_ROLE = await supplyChain.FARMER_ROLE();
-  const MANUFACTURER_ROLE = await supplyChain.MANUFACTURER_ROLE();
-  const LOGISTICS_ROLE = await supplyChain.LOGISTICS_ROLE();
-  const RETAILER_ROLE = await supplyChain.RETAILER_ROLE();
-
-  await supplyChain.grantRole(FARMER_ROLE, demoAccounts.farmer);
-  await supplyChain.grantRole(MANUFACTURER_ROLE, demoAccounts.manufacturer);
-  await supplyChain.grantRole(LOGISTICS_ROLE, demoAccounts.logistics);
-  await supplyChain.grantRole(RETAILER_ROLE, demoAccounts.retailer);
-
-  console.log("Demo roles granted:");
-  console.log(`- Farmer: ${demoAccounts.farmer}`);
-  console.log(`- Manufacturer: ${demoAccounts.manufacturer}`);
-  console.log(`- Logistics: ${demoAccounts.logistics}`);
-  console.log(`- Retailer: ${demoAccounts.retailer}`);
+  // Contract is now deployed with only the deployer as admin
+  console.log("\n✅ Contract deployed successfully!");
+  console.log(`📋 Admin (you): ${deployer.address}`);
+  console.log("🎯 You now have full control to assign roles to any addresses");
+  console.log("\n📖 Next Steps:");
+  console.log("1. Open Remix IDE and connect to your local blockchain");
+  console.log("2. Load your contract and assign roles to addresses as needed");
+  console.log("3. Use different addresses to create supply chain transactions");
+  console.log("4. Your indexer will automatically capture all transactions");
 
   console.log("\nDeployment completed successfully!");
 }

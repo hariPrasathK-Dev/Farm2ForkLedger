@@ -7,7 +7,8 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.js --network local",
-    "deploy:besu": "hardhat run scripts/deploy.js --network besu"
+    "deploy:besu": "hardhat run scripts/deploy.js --network besu",
+    "setup:complete": "hardhat run scripts/setup-complete-environment.js --network local"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",

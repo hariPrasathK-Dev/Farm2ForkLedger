@@ -9,8 +9,6 @@ import { Web3Provider } from "./contexts/Web3Context";
 import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
 import TraceabilityPortal from "./pages/TraceabilityPortal";
-import Dashboard from "./pages/Dashboard";
-import AdminDashboard from "./pages/AdminDashboard";
 
 // Create custom theme
 const theme = createTheme({
@@ -71,8 +69,6 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/trace" element={<TraceabilityPortal />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </Layout>
         </Router>
