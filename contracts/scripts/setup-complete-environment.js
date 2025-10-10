@@ -9,6 +9,16 @@ async function main() {
 
   // Get all signers (different addresses for different roles)
   const signers = await ethers.getSigners();
+
+  if (signers.length < 5) {
+    console.error(
+      `❌ Need at least 5 accounts, but only found ${signers.length}`
+    );
+    console.error("💡 Make sure Ganache is running with --accounts 10");
+    console.error("💡 Run: docker-compose up -d (from project root)");
+    return;
+  }
+
   const [admin, farmer, processor, distributor, retailer] = signers;
 
   console.log("👥 Address Setup:");
