@@ -8,6 +8,7 @@
     "test": "hardhat test",
     "deploy:local": "hardhat run scripts/deploy.js --network local",
     "deploy:besu": "hardhat run scripts/deploy.js --network besu",
+    "diagnose": "hardhat run scripts/diagnose-connection.js --network local",
     "setup:complete": "hardhat run scripts/setup-complete-environment.js --network local"
   },
   "devDependencies": {
