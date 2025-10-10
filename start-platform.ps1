@@ -30,7 +30,7 @@ if (-not (Test-Command "npm")) {
 Write-Host "✅ All prerequisites found" -ForegroundColor Green
 Write-Host ""
 
-# Step 1: Start blockchain
+# Step 1: Start blockchain (now uses simplified Ganache setup)
 Write-Host "🔗 Step 1: Starting blockchain network..." -ForegroundColor Cyan
 docker-compose up -d
 if ($LASTEXITCODE -ne 0) {
@@ -98,8 +98,8 @@ Write-Host "3. Enter: PIZZA-MARG-001" -ForegroundColor White
 Write-Host "4. Explore the complete pizza journey!" -ForegroundColor White
 Write-Host "5. Test blockchain verification system" -ForegroundColor White
 Write-Host ""
-Write-Host "📖 For Remix IDE integration, see:" -ForegroundColor Yellow
-Write-Host "   REMIX_INTEGRATION_GUIDE.md" -ForegroundColor White
+Write-Host "📖 For complete documentation, see:" -ForegroundColor Yellow
+Write-Host "   README.md" -ForegroundColor White
 Write-Host ""
 Write-Host "🚀 Starting frontend..." -ForegroundColor Green
 

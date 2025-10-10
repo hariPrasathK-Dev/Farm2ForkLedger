@@ -183,7 +183,7 @@ async function main() {
   console.log("- All addresses have appropriate roles assigned");
   console.log("- Use different addresses to simulate different entities");
   console.log(
-    "- Check the REMIX_INTEGRATION_GUIDE.md for detailed instructions"
+    "- Check the README.md for complete documentation and Remix IDE instructions"
   );
 
   // Save test data for easy reference

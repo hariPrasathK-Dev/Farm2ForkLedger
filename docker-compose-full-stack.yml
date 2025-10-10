@@ -1,0 +1,90 @@
+version: "3.8"
+
+services:
+  # Complete application stack
+  app:
+    build: ./ui
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001
+      - REACT_APP_CONTRACT_ADDRESS=${CONTRACT_ADDRESS}
+    depends_on:
+      - api
+    networks:
+      - app_network
+
+  api:
+    build: ./services/indexer-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=postgres
+      - DB_NAME=richs_pizza_traceability
+      - DB_USER=richs_user
+      - DB_PASSWORD=richs_password
+      - BESU_RPC_URL=http://besu-node1:8545
+      - CONTRACT_ADDRESS=${CONTRACT_ADDRESS}
+      - START_INDEXER=true
+    depends_on:
+      - postgres
+      - besu-node1
+    networks:
+      - app_network
+      - richs_pizza_network
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=richs_pizza_traceability
+      - POSTGRES_USER=richs_user
+      - POSTGRES_PASSWORD=richs_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./blockchain/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - richs_pizza_network
+      - app_network
+
+  # Include blockchain services
+  besu-node1:
+    extends:
+      file: ./blockchain/docker-compose.yml
+      service: besu-node1
+    networks:
+      - richs_pizza_network
+
+  tessera-node1:
+    extends:
+      file: ./blockchain/docker-compose.yml
+      service: tessera-node1
+    networks:
+      - richs_pizza_network
+
+  besu-node2:
+    extends:
+      file: ./blockchain/docker-compose.yml
+      service: besu-node2
+    networks:
+      - richs_pizza_network
+
+  tessera-node2:
+    extends:
+      file: ./blockchain/docker-compose.yml
+      service: tessera-node2
+    networks:
+      - richs_pizza_network
+
+networks:
+  richs_pizza_network:
+    driver: bridge
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  besu_node1_data:
+  besu_node2_data:
